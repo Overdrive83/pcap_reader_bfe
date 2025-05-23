@@ -100,10 +100,10 @@ impl VTab for PcapVTab {
             };
 
         // Create the pcap reader
-        let pcap_reader = LegacyPcapReader::new(65536, reader).expect("PcapReader");
+        let pcap_reader_bfe = LegacyPcapReader::new(65536, reader).expect("PcapReader");
         
         let reader_wrapper = PcapReaderWrapper {
-            reader: pcap_reader,
+            reader: pcap_reader_bfe,
         };
         
         Ok(PcapInitData {
@@ -432,13 +432,13 @@ impl PcapVTab {
     }
 }
 
-#[duckdb_entrypoint_c_api(ext_name = "pcap_reader", min_duckdb_version = "v1.2.0")]
+#[duckdb_entrypoint_c_api(ext_name = "pcap_reader_bfe", min_duckdb_version = "v1.2.0")]
 pub fn extension_entrypoint(con: Connection) -> Result<(), Box<dyn Error>> {
     // Print a simple load message (could be controlled with a verbose flag if needed)
     debug_print!("Loading PCAP reader extension");
     
-    con.register_table_function::<PcapVTab>("pcap_reader")
-        .expect("Failed to register pcap_reader function");
+    con.register_table_function::<PcapVTab>("pcap_reader_bfe")
+        .expect("Failed to register pcap_readerçbfe function");
     
     Ok(())
 }
